@@ -1,15 +1,32 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
+# Ficheros y carpetas de build generados por Gradle
 /build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+/.gradle
+
+# Ficheros de configuración local que no deben compartirse
+/local.properties
+
+# Ficheros y carpetas de configuración del IDE (Android Studio / IntelliJ)
+/.idea/
+*.iml
+*.iws
+
+# Ficheros de firma de la aplicación (¡NUNCA SUBIR AL REPOSITORIO!)
+*.jks
+*.keystore
+
+# Ficheros de compilación nativa (C++)
+.cxx/
+.externalNativeBuild/
+
+# Ficheros temporales y de sistema operativo
+.DS_Store
+captures/
+*.log
+
+# Esquemas de Room generados por KSP
+/app/schemas/
+
+# Ficheros del Agente de IA y de contexto del proyecto
+AGENT.md
+PROJECT_CONTEXT.md
+TicketsMVP.md
