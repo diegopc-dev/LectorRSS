@@ -17,18 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import com.example.rssclipping.navigation.Screen
 
-/**
- * El "Composable" principal que representa la pantalla de gestión de suscripciones.
- * Utiliza un Scaffold para proporcionar una estructura de Material Design (TopAppBar, FAB).
- *
- * @param viewModel El [SubscriptionsViewModel] que proporciona el estado de la pantalla. Hilt se encarga
- * de inyectarlo automáticamente gracias a `hiltViewModel()`.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscriptionsScreen(
-    viewModel: SubscriptionsViewModel = hiltViewModel()
+    viewModel: SubscriptionsViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val subscriptions by viewModel.subscriptions.collectAsStateWithLifecycle()
 
@@ -37,7 +33,7 @@ fun SubscriptionsScreen(
             TopAppBar(title = { Text("Mis Suscripciones") })
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /* TODO: Navegar a la pantalla de añadir suscripción */ }) {
+            FloatingActionButton(onClick = { navController.navigate(Screen.AddSubscription.route) }) {
                 Icon(Icons.Default.Add, contentDescription = "Añadir suscripción")
             }
         }

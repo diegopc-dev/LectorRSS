@@ -80,6 +80,9 @@ dependencies {
     implementation(libs.hilt.work)
     ksp(libs.hilt.work.compiler)
     implementation(libs.hilt.navigation.compose)
+
+    // Navigation
+    implementation(libs.navigation.compose)
     
     // JUnit 4 (para pruebas de instrumentación) y JUnit 5 (para pruebas unitarias)
     testImplementation(libs.junit)
