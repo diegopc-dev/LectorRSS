@@ -24,6 +24,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
+/**
+ * Composable que representa la pantalla para añadir una nueva suscripción.
+ * Contiene un campo de texto para la URL y un botón para guardar.
+ *
+ * @param viewModel El [AddSubscriptionViewModel] que maneja el estado y la lógica de la pantalla.
+ * @param navController El controlador de navegación para volver a la pantalla anterior.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddSubscriptionScreen(
@@ -32,7 +39,7 @@ fun AddSubscriptionScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // Observa los eventos del ViewModel para navegar hacia atrás.
+    // Observa los eventos del ViewModel para acciones de un solo uso, como la navegación.
     LaunchedEffect(Unit) {
         viewModel.events.collect {
             when (it) {

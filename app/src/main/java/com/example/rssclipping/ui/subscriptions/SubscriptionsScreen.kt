@@ -20,6 +20,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rssclipping.navigation.Screen
 
+/**
+ * Composable que representa la pantalla principal de "Mis Suscripciones".
+ * Muestra una lista de las suscripciones del usuario y un botón flotante para añadir nuevas.
+ *
+ * @param viewModel El [SubscriptionsViewModel] que proporciona el estado de la pantalla (la lista de suscripciones).
+ * @param navController El controlador de navegación para manejar las acciones de la UI, como ir a la pantalla de añadir suscripción o a la de artículos.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscriptionsScreen(
@@ -51,7 +58,7 @@ fun SubscriptionsScreen(
             SubscriptionList(
                 subscriptions = subscriptions,
                 onItemClick = { subscription ->
-                    // Usa la función helper para construir la ruta de forma segura.
+                    // Navega a la pantalla de artículos para la suscripción seleccionada.
                     navController.navigate(Screen.Articles.createRoute(subscription.id))
                 },
                 modifier = Modifier.padding(innerPadding)

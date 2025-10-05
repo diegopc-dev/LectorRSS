@@ -12,6 +12,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+/**
+ * ViewModel para la pantalla de detalle de un artículo.
+ *
+ * @param feedRepository Repositorio para obtener los datos del artículo.
+ * @param savedStateHandle Manejador del estado guardado, usado para obtener el ID del artículo de los argumentos de navegación.
+ */
 @HiltViewModel
 class ArticleDetailViewModel @Inject constructor(
     feedRepository: FeedRepository,
@@ -20,6 +26,10 @@ class ArticleDetailViewModel @Inject constructor(
 
     private val articleId: Long = checkNotNull(savedStateHandle[KEY_ARTICLE_ID])
 
+    /**
+     * Un StateFlow que emite el artículo actual, o null si no se encuentra.
+     * La UI observará este Flow para mostrar los detalles del artículo.
+     */
     val article: StateFlow<ArticleEntity?> = feedRepository.getArticle(articleId)
         .stateIn(
             scope = viewModelScope,

@@ -21,6 +21,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rssclipping.data.local.database.model.SubscriptionEntity
 
+/**
+ * Composable que representa un único elemento en la lista de suscripciones.
+ * Muestra el icono del feed, su nombre y su categoría.
+ *
+ * @param subscription La entidad [SubscriptionEntity] que contiene los datos a mostrar.
+ * @param onClick La acción a ejecutar cuando el usuario pulsa sobre la tarjeta.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscriptionItem(

@@ -32,6 +32,12 @@ import coil.compose.AsyncImage
 import com.example.rssclipping.data.local.database.model.ArticleEntity
 import com.example.rssclipping.navigation.Screen
 
+/**
+ * Composable que representa la pantalla que muestra la lista de artículos de una suscripción.
+ *
+ * @param viewModel El [ArticlesViewModel] que proporciona el estado (la lista de artículos).
+ * @param navController El controlador de navegación para manejar la acción de volver atrás y de ir al detalle del artículo.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArticlesScreen(
@@ -78,6 +84,13 @@ fun ArticlesScreen(
     }
 }
 
+/**
+ * Composable que representa un único elemento en la lista de artículos.
+ * Muestra la miniatura del artículo, su título y su fecha de publicación.
+ *
+ * @param article La entidad [ArticleEntity] que contiene los datos a mostrar.
+ * @param onClick La acción a ejecutar cuando el usuario pulsa sobre la tarjeta.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArticleItem(

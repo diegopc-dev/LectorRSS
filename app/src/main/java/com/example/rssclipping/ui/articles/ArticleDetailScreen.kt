@@ -28,6 +28,13 @@ import com.google.accompanist.web.WebContent
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.WebViewState
 
+/**
+ * Composable que representa la pantalla de detalle de un artículo.
+ * Muestra una imagen de cabecera (la miniatura) y el contenido del artículo en un WebView.
+ *
+ * @param viewModel El [ArticleDetailViewModel] que proporciona el estado (el artículo a mostrar).
+ * @param navController El controlador de navegación para manejar la acción de volver atrás.
+ */
 @SuppressLint("SetJavaScriptEnabled")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
