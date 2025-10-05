@@ -79,6 +79,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.work)
     ksp(libs.hilt.work.compiler)
+    implementation(libs.hilt.navigation.compose)
     
     // JUnit 4 (para pruebas de instrumentación) y JUnit 5 (para pruebas unitarias)
     testImplementation(libs.junit)
@@ -114,8 +115,11 @@ dependencies {
     // Rome
     implementation(libs.rome)
 
-    // MockK
+    // Testing
     testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.arch.core.testing)
+    testImplementation(libs.turbine)
     androidTestImplementation("io.mockk:mockk-android:1.13.12")
 }
 
