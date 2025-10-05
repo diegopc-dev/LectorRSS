@@ -16,4 +16,11 @@ interface SubscriptionRepository {
      * @return Un Flow que emite la lista actualizada de todas las suscripciones cada vez que cambian.
      */
     fun getAllSubscriptions(): Flow<List<SubscriptionEntity>>
+
+    /**
+     * Añade una nueva suscripción a la base de datos a partir de una URL.
+     *
+     * @param url La URL del feed RSS a añadir.
+     */
+    suspend fun addSubscription(url: String)
 }

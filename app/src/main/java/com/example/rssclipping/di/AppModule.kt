@@ -55,7 +55,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSubscriptionRepository(subscriptionDao: SubscriptionDao): SubscriptionRepository {
-        return SubscriptionRepositoryImpl(subscriptionDao)
+    fun provideSubscriptionRepository(subscriptionDao: SubscriptionDao, networkDataSource: RssNetworkDataSource): SubscriptionRepository {
+        return SubscriptionRepositoryImpl(subscriptionDao, networkDataSource)
     }
 }

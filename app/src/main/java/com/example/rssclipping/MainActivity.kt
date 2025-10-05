@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                         SubscriptionsScreen(navController = navController)
                     }
                     composable(Screen.AddSubscription.route) {
-                        AddSubscriptionScreen()
+                        AddSubscriptionScreen(navController = navController)
                     }
                 }
             }
