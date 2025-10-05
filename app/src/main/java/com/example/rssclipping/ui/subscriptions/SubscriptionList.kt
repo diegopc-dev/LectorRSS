@@ -8,23 +8,24 @@ import com.example.rssclipping.data.local.database.model.SubscriptionEntity
 
 /**
  * Un "Composable" que muestra una lista vertical de suscripciones.
- * Utiliza `LazyColumn` para un rendimiento eficiente, ya que solo compone y dibuja
- * los elementos que son visibles en la pantalla.
+ * Utiliza `LazyColumn` para un rendimiento eficiente.
  *
  * @param subscriptions La lista de suscripciones a mostrar.
+ * @param onItemClick La acción a ejecutar cuando se pulsa sobre una suscripción.
  * @param modifier Un [Modifier] opcional para personalizar el layout.
  */
 @Composable
 fun SubscriptionList(
     subscriptions: List<SubscriptionEntity>,
+    onItemClick: (SubscriptionEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
-        // `items` es una función de extensión de `LazyListScope` que permite
-        // construir la lista de forma perezosa a partir de una lista de datos.
-        items(subscriptions) {
-            // Para cada entidad en la lista, se dibuja un `SubscriptionItem`.
-            SubscriptionItem(subscription = it)
+        items(subscriptions) { subscription ->
+            SubscriptionItem(
+                subscription = subscription,
+                onClick = { onItemClick(subscription) } // Pasa la entidad completa hacia arriba.
+            )
         }
     }
 }

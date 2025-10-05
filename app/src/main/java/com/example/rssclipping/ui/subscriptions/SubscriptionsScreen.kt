@@ -50,6 +50,10 @@ fun SubscriptionsScreen(
         } else {
             SubscriptionList(
                 subscriptions = subscriptions,
+                onItemClick = { subscription ->
+                    // Usa la función helper para construir la ruta de forma segura.
+                    navController.navigate(Screen.Articles.createRoute(subscription.id))
+                },
                 modifier = Modifier.padding(innerPadding)
             )
         }

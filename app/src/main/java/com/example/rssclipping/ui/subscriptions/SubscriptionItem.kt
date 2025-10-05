@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,13 +15,19 @@ import com.example.rssclipping.data.local.database.model.SubscriptionEntity
 
 /**
  * Un "Composable" que representa la vista de un único elemento en la lista de suscripciones.
- * Recibe el dato y se encarga únicamente de su representación visual.
+ * Es "clickable" y notifica hacia arriba cuando es presionado.
  *
  * @param subscription La entidad de suscripción a mostrar.
+ * @param onClick La acción a ejecutar cuando el item es pulsado.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubscriptionItem(subscription: SubscriptionEntity) {
+fun SubscriptionItem(
+    subscription: SubscriptionEntity,
+    onClick: () -> Unit
+) {
     Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -34,19 +41,16 @@ fun SubscriptionItem(subscription: SubscriptionEntity) {
     }
 }
 
-/**
- * La anotación @Preview permite a Android Studio renderizar este Composable en el panel de diseño,
- * facilitando el desarrollo visual rápido sin necesidad de ejecutar la app en un emulador.
- */
 @Preview(showBackground = true)
 @Composable
 fun SubscriptionItemPreview() {
     SubscriptionItem(
-        SubscriptionEntity(
+        subscription = SubscriptionEntity(
             id = 1,
             name = "Mi Blog Favorito",
             url = "https://ejemplo.com",
             category = "Tecnología"
-        )
+        ),
+        onClick = {} // En la preview, la acción no hace nada.
     )
 }
