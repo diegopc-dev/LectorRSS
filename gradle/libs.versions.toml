@@ -82,6 +82,7 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 
 # Rome
 rome = { group = "com.rometools", name = "rome", version.ref = "rome" }
+rome-modules = { group = "com.rometools", name = "rome-modules", version.ref = "rome" }
 
 # Testing
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jupiter" }

@@ -124,6 +124,7 @@ dependencies {
 
     // Rome
     implementation(libs.rome)
+    implementation(libs.rome.modules)
 
     // Testing
     testImplementation(libs.mockk)

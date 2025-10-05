@@ -2,8 +2,10 @@ package com.example.rssclipping.ui.articles
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,10 +23,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.rssclipping.data.local.database.model.ArticleEntity
 import com.example.rssclipping.navigation.Screen
 
@@ -86,11 +90,24 @@ fun ArticleItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(text = article.title, style = MaterialTheme.typography.titleMedium)
-            Text(text = article.pubDate, style = MaterialTheme.typography.bodySmall)
+        Column {
+            if (article.thumbnailUrl.isNotBlank()) {
+                AsyncImage(
+                    model = article.thumbnailUrl,
+                    contentDescription = "Miniatura del artículo",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = article.title, style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = article.pubDate, style = MaterialTheme.typography.bodySmall)
+            }
         }
     }
 }

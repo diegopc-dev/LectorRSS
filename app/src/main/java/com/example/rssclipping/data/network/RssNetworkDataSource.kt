@@ -2,6 +2,7 @@ package com.example.rssclipping.data.network
 
 import com.example.rssclipping.data.network.model.NetworkArticle
 import com.example.rssclipping.data.network.model.NetworkFeed
+import com.rometools.modules.mediarss.MediaModule
 import com.rometools.rome.io.SyndFeedInput
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -38,12 +39,18 @@ class RssNetworkDataSource(
         // Mapear los artículos
         val articles = feed.entries.mapNotNull { entry ->
             val guid = entry.uri ?: entry.link ?: return@mapNotNull null
+
+            // Extraer la miniatura del módulo de Media RSS
+            val mediaModule = entry.getModule(MediaModule.URI) as? MediaModule
+            val thumbnailUrl = mediaModule?.metadata?.thumbnail?.firstOrNull()?.url ?: ""
+
             NetworkArticle(
                 guid = guid,
                 title = entry.title ?: "",
                 link = entry.link ?: "",
                 pubDate = entry.publishedDate?.toString() ?: "",
-                content = entry.description?.value ?: ""
+                content = entry.description?.value ?: "",
+                thumbnailUrl = thumbnailUrl
             )
         }
 

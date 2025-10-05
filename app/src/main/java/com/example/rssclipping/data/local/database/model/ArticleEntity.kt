@@ -60,5 +60,10 @@ data class ArticleEntity(
     /**
      * El cuerpo o contenido del artículo, usualmente en formato HTML.
      */
-    val content: String
+    val content: String,
+
+    /**
+     * La URL de la imagen en miniatura del artículo.
+     */
+    val thumbnailUrl: String
 )

@@ -5,6 +5,14 @@ import com.example.rssclipping.data.local.database.model.SubscriptionEntity
 import com.example.rssclipping.data.network.RssNetworkDataSource
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Implementación concreta de [SubscriptionRepository].
+ * Orquesta las fuentes de datos para las suscripciones, obteniendo los metadatos del feed
+ * desde la red para crear la entidad en la base de datos.
+ *
+ * @param subscriptionDao El DAO para acceder a los datos de suscripciones en la base de datos local.
+ * @param networkDataSource La fuente de datos de red para obtener los feeds RSS.
+ */
 class SubscriptionRepositoryImpl(
     private val subscriptionDao: SubscriptionDao,
     private val networkDataSource: RssNetworkDataSource
