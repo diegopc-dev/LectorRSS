@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rssclipping.data.local.database.model.ArticleEntity
+import com.example.rssclipping.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,16 +62,26 @@ fun ArticlesScreen(
                 modifier = Modifier.padding(innerPadding)
             ) {
                 items(articles) { article ->
-                    ArticleItem(article = article)
+                    ArticleItem(
+                        article = article,
+                        onClick = { 
+                            navController.navigate(Screen.ArticleDetail.createRoute(article.id))
+                        }
+                    )
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ArticleItem(article: ArticleEntity) {
+fun ArticleItem(
+    article: ArticleEntity,
+    onClick: () -> Unit
+) {
     Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)

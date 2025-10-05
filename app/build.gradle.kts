@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.appcompat)
 
     // Hilt
@@ -87,11 +88,14 @@ dependencies {
     // Accompanist
     implementation(libs.accompanist.webview)
 
+    // Coil
+    implementation(libs.coil.compose)
+
     // JUnit 4 (para pruebas de instrumentación) y JUnit 5 (para pruebas unitarias)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
     
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -126,7 +130,7 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.arch.core.testing)
     testImplementation(libs.turbine)
-    androidTestImplementation("io.mockk:mockk-android:1.13.12")
+    androidTestImplementation(libs.mockk.android)
 }
 
 ksp {

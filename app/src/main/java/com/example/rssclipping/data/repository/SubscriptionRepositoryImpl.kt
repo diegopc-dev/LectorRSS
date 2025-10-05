@@ -15,17 +15,16 @@ class SubscriptionRepositoryImpl(
     }
 
     override suspend fun addSubscription(url: String): Long {
-        val name = try {
-            // Obtenemos el feed completo para usar su título
-            val feed = networkDataSource.fetchFeed(url)
-            feed.channelTitle.ifBlank { url } // Si el título del canal está vacío, usamos la URL
-        } catch (e: Exception) {
-            url // Si la red falla, usamos la URL como nombre
+        val feed = try {
+            networkDataSource.fetchFeed(url)
+        } catch (_: Exception) {
+            null
         }
 
         val newSubscription = SubscriptionEntity(
             url = url,
-            name = name,
+            name = feed?.channelTitle?.ifBlank { url } ?: url,
+            iconUrl = feed?.channelIconUrl ?: "",
             category = "General"
         )
         

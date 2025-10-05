@@ -26,6 +26,11 @@ data class SubscriptionEntity(
     val name: String,
 
     /**
+     * La URL del icono o favicon del feed.
+     */
+    val iconUrl: String,
+
+    /**
      * Categoría asignada por el usuario para organizar las suscripciones.
      */
     val category: String

@@ -31,7 +31,7 @@ object AppModule {
             AppDatabase::class.java,
             "rss_clipping_database"
         )
-        .addMigrations(AppDatabase.MIGRATION_1_2)
+        .addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3)
         .build()
     }
 

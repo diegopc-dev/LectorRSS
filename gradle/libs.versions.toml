@@ -15,7 +15,8 @@ lifecycleViewmodelKtx = "2.7.0"
 workRuntimeKtx = "2.10.3"
 ktor = "2.3.12"
 rome = "1.18.0"
-mockk = "1.13.12"
+mockk = "1.14.6"
+jupiter = "6.0.0"
 hilt = "2.51.1"
 hiltWork = "1.2.0"
 coroutinesTest = "1.8.0"
@@ -24,6 +25,7 @@ turbine = "1.1.0"
 hiltNavigationCompose = "1.2.0"
 navigationCompose = "2.7.7"
 accompanist = "0.32.0"
+coil = "2.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,6 +42,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 # Hilt
@@ -54,6 +57,9 @@ navigation-compose = { module = "androidx.navigation:navigation-compose", versio
 
 # Accompanist
 accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
+
+# Coil
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 # Room
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
@@ -78,7 +84,10 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 rome = { group = "com.rometools", name = "rome", version.ref = "rome" }
 
 # Testing
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jupiter" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "jupiter" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest" }
 arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "archCoreTesting" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
