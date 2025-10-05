@@ -42,7 +42,7 @@ class RssNetworkDataSource(
 
             // Extraer la miniatura del módulo de Media RSS
             val mediaModule = entry.getModule(MediaModule.URI) as? MediaModule
-            val thumbnailUrl = mediaModule?.metadata?.thumbnail?.firstOrNull()?.url ?: ""
+            val thumbnailUrl = mediaModule?.metadata?.thumbnail?.firstOrNull()?.url?.toString() ?: ""
 
             NetworkArticle(
                 guid = guid,
