@@ -55,5 +55,10 @@ data class ArticleEntity(
     /**
      * La fecha de publicación del artículo, como un String.
      */
-    val pubDate: String
+    val pubDate: String,
+
+    /**
+     * El cuerpo o contenido del artículo, usualmente en formato HTML.
+     */
+    val content: String
 )

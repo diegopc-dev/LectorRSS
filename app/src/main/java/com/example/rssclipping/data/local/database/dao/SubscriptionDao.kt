@@ -19,9 +19,10 @@ interface SubscriptionDao {
      * Si la suscripción ya existe (basado en su clave primaria), será reemplazada
      * gracias a la estrategia OnConflictStrategy.REPLACE.
      * @param subscription La entidad de suscripción a insertar.
+     * @return El ID de la fila recién insertada.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(subscription: SubscriptionEntity)
+    suspend fun insert(subscription: SubscriptionEntity): Long
 
     /**
      * Recupera todas las suscripciones de la base de datos, ordenadas por nombre.

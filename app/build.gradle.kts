@@ -84,6 +84,9 @@ dependencies {
     // Navigation
     implementation(libs.navigation.compose)
     
+    // Accompanist
+    implementation(libs.accompanist.webview)
+
     // JUnit 4 (para pruebas de instrumentación) y JUnit 5 (para pruebas unitarias)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -21,6 +21,7 @@ interface SubscriptionRepository {
      * Añade una nueva suscripción a la base de datos a partir de una URL.
      *
      * @param url La URL del feed RSS a añadir.
+     * @return El ID de la suscripción recién creada.
      */
-    suspend fun addSubscription(url: String)
+    suspend fun addSubscription(url: String): Long
 }

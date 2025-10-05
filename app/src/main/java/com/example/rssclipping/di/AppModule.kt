@@ -30,7 +30,9 @@ object AppModule {
             context.applicationContext,
             AppDatabase::class.java,
             "rss_clipping_database"
-        ).build()
+        )
+        .addMigrations(AppDatabase.MIGRATION_1_2)
+        .build()
     }
 
     @Provides

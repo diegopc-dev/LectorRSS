@@ -40,8 +40,8 @@ interface ArticleDao {
     /**
      * Recupera un artículo específico por su ID.
      * @param id El ID del artículo a buscar.
-     * @return La [ArticleEntity] correspondiente, o null si no se encuentra.
+     * @return Un Flow que emite la [ArticleEntity] correspondiente, o null si no se encuentra.
      */
     @Query("SELECT * FROM articles WHERE id = :id")
-    suspend fun getById(id: Long): ArticleEntity?
+    fun getById(id: Long): Flow<ArticleEntity?>
 }

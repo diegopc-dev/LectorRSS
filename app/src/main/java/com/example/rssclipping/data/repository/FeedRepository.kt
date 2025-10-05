@@ -21,6 +21,14 @@ interface FeedRepository {
     fun getArticles(subscriptionId: Long): Flow<List<ArticleEntity>>
 
     /**
+     * Obtiene un Flow con un único artículo por su ID.
+     *
+     * @param id El ID del artículo a obtener.
+     * @return Un Flow que emite el [ArticleEntity] o null si no se encuentra.
+     */
+    fun getArticle(id: Long): Flow<ArticleEntity?>
+
+    /**
      * Fuerza la sincronización de una suscripción. Esta operación obtiene los últimos artículos desde la red
      * y los guarda en la base de datos local. La UI, al estar observando el Flow de `getArticles`,
      * se actualizará automáticamente cuando los nuevos datos se inserten.

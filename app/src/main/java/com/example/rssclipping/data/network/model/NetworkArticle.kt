@@ -8,5 +8,6 @@ data class NetworkArticle(
     val guid: String,
     val title: String,
     val link: String,
-    val pubDate: String
+    val pubDate: String,
+    val content: String
 )

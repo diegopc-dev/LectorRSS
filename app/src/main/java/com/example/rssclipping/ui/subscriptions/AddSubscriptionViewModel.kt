@@ -2,6 +2,7 @@ package com.example.rssclipping.ui.subscriptions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rssclipping.data.repository.FeedRepository
 import com.example.rssclipping.data.repository.SubscriptionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddSubscriptionViewModel @Inject constructor(
-    private val subscriptionRepository: SubscriptionRepository
+    private val subscriptionRepository: SubscriptionRepository,
+    private val feedRepository: FeedRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddSubscriptionUiState())
@@ -31,7 +33,11 @@ class AddSubscriptionViewModel @Inject constructor(
         viewModelScope.launch {
             val url = _uiState.value.url
             if (url.isNotBlank()) {
-                subscriptionRepository.addSubscription(url)
+                // 1. Crear la suscripción y obtener su ID
+                val newId = subscriptionRepository.addSubscription(url)
+                // 2. Sincronizar los artículos para esa nueva suscripción
+                feedRepository.syncSubscription(url, newId)
+                // 3. Navegar hacia atrás
                 _events.emit(AddSubscriptionEvent.NavigateBack)
             }
         }
