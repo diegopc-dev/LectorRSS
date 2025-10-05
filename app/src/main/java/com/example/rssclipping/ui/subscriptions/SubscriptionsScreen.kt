@@ -2,7 +2,15 @@ package com.example.rssclipping.ui.subscriptions
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -12,31 +20,42 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 /**
  * El "Composable" principal que representa la pantalla de gestión de suscripciones.
- * Es el punto de entrada de la UI para esta feature.
+ * Utiliza un Scaffold para proporcionar una estructura de Material Design (TopAppBar, FAB).
  *
  * @param viewModel El [SubscriptionsViewModel] que proporciona el estado de la pantalla. Hilt se encarga
  * de inyectarlo automáticamente gracias a `hiltViewModel()`.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscriptionsScreen(
     viewModel: SubscriptionsViewModel = hiltViewModel()
 ) {
-    // Observa el StateFlow del ViewModel. `collectAsStateWithLifecycle` se encarga de
-    // recoger el flujo de forma segura, respetando el ciclo de vida del Composable.
-    // Cada vez que el Flow emita un nuevo valor, este Composable se recompondrá.
     val subscriptions by viewModel.subscriptions.collectAsStateWithLifecycle()
 
-    // Lógica de UI: decide qué mostrar basándose en el estado actual.
-    if (subscriptions.isEmpty()) {
-        // Si la lista está vacía, muestra un mensaje centrado.
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = "No hay suscripciones.")
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("Mis Suscripciones") })
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { /* TODO: Navegar a la pantalla de añadir suscripción */ }) {
+                Icon(Icons.Default.Add, contentDescription = "Añadir suscripción")
+            }
         }
-    } else {
-        // Si hay datos, se los pasa al Composable que se encarga de dibujar la lista.
-        SubscriptionList(subscriptions = subscriptions)
+    ) { innerPadding ->
+        if (subscriptions.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "No hay suscripciones. Añade una con el botón +.")
+            }
+        } else {
+            SubscriptionList(
+                subscriptions = subscriptions,
+                modifier = Modifier.padding(innerPadding)
+            )
+        }
     }
 }
