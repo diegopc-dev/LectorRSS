@@ -59,6 +59,8 @@ android {
         resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         resources.excludes.add("META-INF/LICENSE.md")
         resources.excludes.add("META-INF/LICENSE-notice.md")
+        // Excluir fichero duplicado de la librería Rome
+        resources.excludes.add("rome-utils-1.18.0.jar")
     }
 }
 
