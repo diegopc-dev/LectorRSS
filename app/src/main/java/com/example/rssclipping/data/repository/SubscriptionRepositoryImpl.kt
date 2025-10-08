@@ -18,7 +18,7 @@ class SubscriptionRepositoryImpl(
     private val networkDataSource: RssNetworkDataSource
 ) : SubscriptionRepository {
 
-    override fun getAllSubscriptions(): Flow<List<SubscriptionEntity>> {
+    override fun getAll(): Flow<List<SubscriptionEntity>> {
         return subscriptionDao.getAll()
     }
 
@@ -37,5 +37,13 @@ class SubscriptionRepositoryImpl(
         )
         
         return subscriptionDao.insert(newSubscription)
+    }
+
+    override suspend fun updateSubscription(subscription: SubscriptionEntity) {
+        subscriptionDao.update(subscription)
+    }
+
+    override suspend fun deleteSubscription(subscription: SubscriptionEntity) {
+        subscriptionDao.delete(subscription)
     }
 }

@@ -33,7 +33,7 @@ class SyncWorker @AssistedInject constructor(
         return try {
             // 1. Obtener la lista de todas las suscripciones del usuario.
             // Usamos .first() para obtener solo la instantánea actual de la lista desde el Flow.
-            val subscriptions = subscriptionRepository.getAllSubscriptions().first()
+            val subscriptions = subscriptionRepository.getAll().first()
 
             // 2. Iterar sobre cada suscripción y pedir al FeedRepository que la sincronice.
             // La lógica compleja de red y base de datos está encapsulada en el repositorio.

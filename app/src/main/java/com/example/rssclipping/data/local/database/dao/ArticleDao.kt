@@ -23,6 +23,13 @@ interface ArticleDao {
     suspend fun insertAll(articles: List<ArticleEntity>)
 
     /**
+     * Recupera todos los artículos de la base de datos, ordenados por fecha de publicación descendente.
+     * @return Un Flow que emite la lista completa de artículos.
+     */
+    @Query("SELECT * FROM articles ORDER BY pubDate DESC")
+    fun getAllArticles(): Flow<List<ArticleEntity>>
+
+    /**
      * Recupera todos los artículos asociados a un ID de suscripción específico.
      * @param subscriptionId El ID de la suscripción padre.
      * @return Un Flow que emite la lista de artículos para la suscripción dada.

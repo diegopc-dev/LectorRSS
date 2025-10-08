@@ -15,7 +15,7 @@ interface SubscriptionRepository {
      *
      * @return Un Flow que emite la lista actualizada de todas las suscripciones cada vez que cambian.
      */
-    fun getAllSubscriptions(): Flow<List<SubscriptionEntity>>
+    fun getAll(): Flow<List<SubscriptionEntity>>
 
     /**
      * Añade una nueva suscripción a la base de datos a partir de una URL.
@@ -24,4 +24,16 @@ interface SubscriptionRepository {
      * @return El ID de la suscripción recién creada.
      */
     suspend fun addSubscription(url: String): Long
+
+    /**
+     * Actualiza una suscripción existente en la base de datos.
+     * @param subscription La suscripción con los datos modificados.
+     */
+    suspend fun updateSubscription(subscription: SubscriptionEntity)
+
+    /**
+     * Elimina una suscripción de la base de datos.
+     * @param subscription La suscripción a eliminar.
+     */
+    suspend fun deleteSubscription(subscription: SubscriptionEntity)
 }

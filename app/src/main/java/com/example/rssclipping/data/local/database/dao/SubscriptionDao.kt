@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.rssclipping.data.local.database.model.SubscriptionEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -23,6 +24,14 @@ interface SubscriptionDao {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(subscription: SubscriptionEntity): Long
+
+    /**
+     * Actualiza una suscripción existente en la base de datos.
+     * Room identifica la suscripción por su clave primaria.
+     * @param subscription La entidad de suscripción con los datos actualizados.
+     */
+    @Update
+    suspend fun update(subscription: SubscriptionEntity)
 
     /**
      * Recupera todas las suscripciones de la base de datos, ordenadas por nombre.

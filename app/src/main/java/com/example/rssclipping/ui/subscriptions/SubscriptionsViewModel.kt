@@ -8,27 +8,50 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
  * ViewModel para la pantalla de gestión de suscripciones.
- * Se encarga de obtener los datos del repositorio y exponerlos a la UI.
  */
 @HiltViewModel
 class SubscriptionsViewModel @Inject constructor(
-    subscriptionRepository: SubscriptionRepository
+    private val subscriptionRepository: SubscriptionRepository
 ) : ViewModel() {
 
     /**
-     * Un StateFlow que emite la lista actual de suscripciones.
-     * La UI observará este Flow para actualizarse automáticamente.
-     * Usamos `stateIn` para convertir el Flow "frío" del repositorio en un Flow "caliente"
-     * que puede ser compartido por múltiples observadores y que mantiene el último valor.
+     * Un StateFlow que emite la lista de suscripciones.
+     * Se obtiene directamente del repositorio y se convierte en un StateFlow para que la UI
+     * pueda observarlo de forma segura y eficiente.
      */
-    val subscriptions: StateFlow<List<SubscriptionEntity>> = subscriptionRepository.getAllSubscriptions()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000L),
-            initialValue = emptyList()
-        )
+    val subscriptions: StateFlow<List<SubscriptionEntity>> = subscriptionRepository.getAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    /**
+     * Añade una nueva suscripción a partir de una URL.
+     * La operación se lanza en una corrutina de viewModelScope.
+     */
+    fun addSubscription(url: String) {
+        viewModelScope.launch {
+            subscriptionRepository.addSubscription(url)
+        }
+    }
+
+    /**
+     * Actualiza una suscripción existente.
+     */
+    fun updateSubscription(subscription: SubscriptionEntity) {
+        viewModelScope.launch {
+            subscriptionRepository.updateSubscription(subscription)
+        }
+    }
+
+    /**
+     * Elimina una suscripción.
+     */
+    fun deleteSubscription(subscription: SubscriptionEntity) {
+        viewModelScope.launch {
+            subscriptionRepository.deleteSubscription(subscription)
+        }
+    }
 }

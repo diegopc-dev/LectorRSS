@@ -11,6 +11,12 @@ import kotlinx.coroutines.flow.Flow
 interface FeedRepository {
 
     /**
+     * Obtiene un Flow con todos los artículos de la base de datos.
+     * @return Un Flow que emite la lista completa de artículos cada vez que cambian.
+     */
+    fun getAllArticles(): Flow<List<ArticleEntity>>
+
+    /**
      * Obtiene un Flow con todos los artículos de una suscripción directamente desde la base de datos.
      * Sigue el principio de "offline-first", devolviendo inmediatamente los datos cacheados.
      * No se encarga de la sincronización; esa es una responsabilidad separada.

@@ -20,6 +20,10 @@ class FeedRepositoryImpl(
     private val networkDataSource: RssNetworkDataSource
 ) : FeedRepository {
 
+    override fun getAllArticles(): Flow<List<ArticleEntity>> {
+        return articleDao.getAllArticles()
+    }
+
     override fun getArticles(subscriptionId: Long): Flow<List<ArticleEntity>> {
         return articleDao.getArticlesBySubscriptionId(subscriptionId)
     }

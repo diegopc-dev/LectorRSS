@@ -86,9 +86,6 @@ dependencies {
 
     // Navigation
     implementation(libs.navigation.compose)
-    
-    // Accompanist
-    implementation(libs.accompanist.webview)
 
     // Coil
     implementation(libs.coil.compose)
