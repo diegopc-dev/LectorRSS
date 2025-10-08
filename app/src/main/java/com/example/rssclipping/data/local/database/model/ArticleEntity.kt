@@ -21,9 +21,12 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE // Si se borra una suscripción, se borrarán todos sus artículos.
         )
     ],
-    // Crea un índice único en la columna 'guid'. Esto es crucial para evitar duplicados,
-    // ya que el 'guid' (Globally Unique Identifier) es único para cada artículo en un feed.
-    indices = [Index(value = ["guid"], unique = true)]
+    indices = [
+        // Crea un índice único en la columna 'guid' para evitar duplicados.
+        Index(value = ["guid"], unique = true),
+        // Crea un índice en 'subscriptionId' para acelerar las consultas que filtran por suscripción.
+        Index(value = ["subscriptionId"])
+    ]
 )
 data class ArticleEntity(
     /**
