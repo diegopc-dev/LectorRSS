@@ -7,6 +7,7 @@ package com.example.rssclipping.ui.navigation
 sealed class Screen(val route: String) {
     object Timeline : Screen("timeline")
     object Subscriptions : Screen("subscriptions")
+    object Settings : Screen("settings")
 
     // Ruta para el detalle del artículo, que requiere un ID como argumento.
     object ArticleDetail : Screen("article_detail/{articleId}") {

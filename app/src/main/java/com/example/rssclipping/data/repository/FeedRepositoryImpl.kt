@@ -5,6 +5,7 @@ import com.example.rssclipping.data.local.database.model.ArticleEntity
 import com.example.rssclipping.data.network.RssNetworkDataSource
 import com.example.rssclipping.data.network.model.NetworkArticle
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import java.io.IOException
 
 /**
@@ -14,10 +15,12 @@ import java.io.IOException
  *
  * @param articleDao El DAO para acceder a los datos de artículos en la base de datos local.
  * @param networkDataSource La fuente de datos de red para obtener los feeds RSS.
+ * @param subscriptionRepository El repositorio de suscripciones para obtener la lista de todas las suscripciones.
  */
 class FeedRepositoryImpl(
     private val articleDao: ArticleDao,
-    private val networkDataSource: RssNetworkDataSource
+    private val networkDataSource: RssNetworkDataSource,
+    private val subscriptionRepository: SubscriptionRepository
 ) : FeedRepository {
 
     override fun getAllArticles(): Flow<List<ArticleEntity>> {
@@ -34,15 +37,29 @@ class FeedRepositoryImpl(
 
     override suspend fun syncSubscription(subscriptionUrl: String, subscriptionId: Long) {
         try {
+            // 1. Obtiene los artículos de la red.
             val networkArticles = networkDataSource.fetchFeed(subscriptionUrl).articles
+            // 2. Mapea los artículos de red a entidades de base de datos.
             val articleEntities = networkArticles.map { it.toEntity(subscriptionId) }
+            // 3. Inserta las nuevas entidades en la base de datos.
             articleDao.insertAll(articleEntities)
         } catch (e: IOException) {
             // Ignorar errores de red (sin conexión, 404, etc.) para no interrumpir al usuario.
+            // En una app de producción, aquí se podría registrar el error en un sistema de logging.
             e.printStackTrace()
         } catch (e: Exception) {
             // Ignorar otras posibles excepciones (ej. durante el parseo del XML) para robustez.
             e.printStackTrace()
+        }
+    }
+
+    override suspend fun syncAllSubscriptions() {
+        // Obtiene la lista actual de suscripciones desde el repositorio. Usa .first() para obtener
+        // solo el valor más reciente del Flow y no quedarse esperando futuras emisiones.
+        val subscriptions = subscriptionRepository.getAll().first()
+        // Itera sobre cada una y lanza su sincronización individual.
+        subscriptions.forEach { subscription ->
+            syncSubscription(subscription.url, subscription.id)
         }
     }
 }

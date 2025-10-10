@@ -20,6 +20,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rssclipping.data.local.database.model.SubscriptionEntity
 
+/**
+ * Composable que representa un único elemento en la lista de suscripciones.
+ * Muestra el icono, el nombre y los botones de acción para editar y eliminar.
+ * @param subscription La entidad de la suscripción a mostrar.
+ * @param onEdit La acción a ejecutar cuando se pulsa el botón de editar.
+ * @param onDelete La acción a ejecutar cuando se pulsa el botón de eliminar.
+ */
 @Composable
 fun SubscriptionItem(
     subscription: SubscriptionEntity,

@@ -12,9 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -43,51 +47,82 @@ import com.example.rssclipping.data.local.database.model.ArticleEntity
 import com.example.rssclipping.data.local.database.model.SubscriptionEntity
 import com.example.rssclipping.ui.navigation.Screen
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Composable principal de la pantalla del Timeline. Muestra la lista de artículos
+ * y gestiona la interacción del usuario (navegación, filtrado, refresco).
+ * @param navController El controlador de navegación para moverse a otras pantallas.
+ * @param viewModel El [TimelineViewModel] que proporciona el estado de la UI.
+ */
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun TimelineScreen(
     navController: NavController,
     viewModel: TimelineViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    // Estado para el gesto de "tirar para refrescar"
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = uiState.isRefreshing,
+        onRefresh = viewModel::refreshFeeds
+    )
 
     Scaffold(
         topBar = {
             TimelineTopAppBar(
                 state = uiState,
                 onFilterChanged = viewModel::onFilterChanged,
-                onNavigateToSubscriptions = { navController.navigate(Screen.Subscriptions.route) }
+                onNavigateToSubscriptions = { navController.navigate(Screen.Subscriptions.route) },
+                onNavigateToSettings = { navController.navigate(Screen.Settings.route) }
             )
         }
     ) { paddingValues ->
-        if (uiState.allArticles.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
-                Text("No hay artículos. Añade una suscripción para empezar.")
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(8.dp)
-            ) {
-                items(uiState.displayedArticles, key = { it.id }) { article ->
-                    ArticleItem(article = article) {
-                        navController.navigate(Screen.ArticleDetail.createRoute(article.id))
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .pullRefresh(pullRefreshState) // Aplica el modificador de pull-refresh
+        ) {
+            if (uiState.allArticles.isEmpty() && !uiState.isRefreshing) {
+                // Muestra un mensaje si la lista está vacía y no se está refrescando
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("No hay artículos. Añade una suscripción para empezar.")
+                }
+            } else {
+                // Muestra la lista de artículos
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(8.dp)
+                ) {
+                    items(uiState.displayedArticles, key = { it.id }) { article ->
+                        ArticleItem(article = article) {
+                            navController.navigate(Screen.ArticleDetail.createRoute(article.id))
+                        }
                     }
                 }
             }
+
+            // Indicador visual que se muestra en la parte superior durante el refresco
+            PullRefreshIndicator(
+                refreshing = uiState.isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }
 
+/**
+ * Composable para la barra superior de la pantalla del Timeline.
+ * Contiene el título y los menús de acciones (filtrar y opciones).
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimelineTopAppBar(
     state: TimelineUiState,
     onFilterChanged: (SubscriptionEntity?) -> Unit,
-    onNavigateToSubscriptions: () -> Unit
+    onNavigateToSubscriptions: () -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     var showFilterMenu by remember { mutableStateOf(false) }
     var showOptionsMenu by remember { mutableStateOf(false) }
@@ -115,11 +150,17 @@ private fun TimelineTopAppBar(
             }
             DropdownMenu(expanded = showOptionsMenu, onDismissRequest = { showOptionsMenu = false }) {
                 DropdownMenuItem(text = { Text("Suscripciones") }, onClick = onNavigateToSubscriptions)
+                DropdownMenuItem(text = { Text("Ajustes") }, onClick = onNavigateToSettings)
             }
         }
     )
 }
 
+/**
+ * Composable que representa un único artículo en la lista del timeline.
+ * @param article La entidad del artículo a mostrar.
+ * @param onClick La acción a ejecutar cuando se pulsa sobre el elemento.
+ */
 @Composable
 private fun ArticleItem(
     article: ArticleEntity,

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.rssclipping.ui.articles.ArticleDetailScreen
+import com.example.rssclipping.ui.settings.SettingsScreen
 import com.example.rssclipping.ui.timeline.TimelineScreen
 import com.example.rssclipping.ui.subscriptions.SubscriptionsScreen
 
@@ -27,6 +28,11 @@ fun AppNavigation() {
         // Ruta para la pantalla de gestión de suscripciones
         composable(Screen.Subscriptions.route) {
             SubscriptionsScreen(navController = navController)
+        }
+
+        // Ruta para la pantalla de ajustes
+        composable(Screen.Settings.route) {
+            SettingsScreen(navController = navController)
         }
 
         // Ruta para la pantalla de detalle del artículo

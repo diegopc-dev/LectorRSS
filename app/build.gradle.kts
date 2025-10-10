@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.appcompat)
@@ -89,6 +90,9 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
+
+    // DataStore
+    implementation(libs.datastore.preferences)
 
     // JUnit 4 (para pruebas de instrumentación) y JUnit 5 (para pruebas unitarias)
     testImplementation(libs.junit)

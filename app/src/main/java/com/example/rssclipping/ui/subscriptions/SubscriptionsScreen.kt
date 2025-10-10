@@ -34,6 +34,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.rssclipping.data.local.database.model.SubscriptionEntity
 
+/**
+ * Composable principal para la pantalla de gestión de suscripciones.
+ * Muestra la lista de suscripciones y permite al usuario añadirlas, editarlas y eliminarlas.
+ * @param navController El controlador de navegación para volver a la pantalla anterior.
+ * @param viewModel El [SubscriptionsViewModel] que proporciona el estado y la lógica de negocio.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscriptionsScreen(
@@ -41,7 +47,9 @@ fun SubscriptionsScreen(
     viewModel: SubscriptionsViewModel = hiltViewModel()
 ) {
     val subscriptions by viewModel.subscriptions.collectAsStateWithLifecycle()
+    // Estado para controlar la visibilidad del diálogo de añadir
     var showAddDialog by remember { mutableStateOf(false) }
+    // Estado para guardar la suscripción que se está editando, o null si ninguna
     var subscriptionToEdit by remember { mutableStateOf<SubscriptionEntity?>(null) }
 
     Scaffold(
@@ -75,6 +83,7 @@ fun SubscriptionsScreen(
             }
         }
 
+        // Muestra el diálogo de añadir si showAddDialog es true
         if (showAddDialog) {
             AddSubscriptionDialog(
                 onDismiss = { showAddDialog = false },
@@ -85,6 +94,7 @@ fun SubscriptionsScreen(
             )
         }
 
+        // Muestra el diálogo de editar si hay una suscripción para editar
         subscriptionToEdit?.let { subscription ->
             EditSubscriptionDialog(
                 subscription = subscription,
@@ -98,6 +108,11 @@ fun SubscriptionsScreen(
     }
 }
 
+/**
+ * Diálogo para añadir una nueva suscripción a partir de una URL.
+ * @param onDismiss Lambda que se ejecuta cuando el usuario cierra el diálogo.
+ * @param onConfirm Lambda que se ejecuta cuando el usuario confirma la acción, pasando la URL introducida.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AddSubscriptionDialog(
@@ -132,6 +147,12 @@ private fun AddSubscriptionDialog(
     )
 }
 
+/**
+ * Diálogo para editar una suscripción existente.
+ * @param subscription La suscripción a editar.
+ * @param onDismiss Lambda que se ejecuta cuando el usuario cierra el diálogo.
+ * @param onConfirm Lambda que se ejecuta cuando el usuario confirma la acción, pasando la suscripción con los datos actualizados.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EditSubscriptionDialog(
