@@ -19,6 +19,8 @@ object DateParser {
     private val formatters = listOf(
         // Formato RFC_1123_DATE_TIME (ej. "Tue, 03 Jun 2008 11:05:30 GMT"). Es el más común.
         DateTimeFormatter.RFC_1123_DATE_TIME.withLocale(Locale.ENGLISH),
+        // Formato específico encontrado en los logs (ej. "Sat Oct 11 08:31:57 GMT 2025")
+        DateTimeFormatter.ofPattern("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH),
         // Formato ISO_ZONED_DATE_TIME (ej. "2011-12-03T10:15:30+01:00[Europe/Paris]")
         DateTimeFormatter.ISO_ZONED_DATE_TIME,
         // Formatos personalizados para variaciones comunes.
@@ -39,14 +41,15 @@ object DateParser {
     fun normalizeDate(dateString: String?): String {
         if (dateString.isNullOrBlank()) return ""
 
-        var lastException: DateTimeParseException?
+        var lastException: DateTimeParseException? = null
 
         // 1. Intentar con la lista de formateadores comunes.
         for (formatter in formatters) {
             try {
                 val zonedDateTime = ZonedDateTime.parse(dateString, formatter)
                 return outputFormatter.format(zonedDateTime)
-            } catch (_: DateTimeParseException) {
+            } catch (e: DateTimeParseException) {
+                lastException = e
                 continue
             }
         }
