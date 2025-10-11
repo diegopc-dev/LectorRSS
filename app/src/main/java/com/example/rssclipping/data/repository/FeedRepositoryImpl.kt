@@ -3,6 +3,7 @@ package com.example.rssclipping.data.repository
 import com.example.rssclipping.data.local.database.dao.ArticleDao
 import com.example.rssclipping.data.local.database.model.ArticleEntity
 import com.example.rssclipping.data.network.RssNetworkDataSource
+import com.example.rssclipping.data.network.model.DateParser
 import com.example.rssclipping.data.network.model.NetworkArticle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -67,7 +68,7 @@ class FeedRepositoryImpl(
 /**
  * Función de extensión privada para mapear un [NetworkArticle] (modelo de red)
  * a una [ArticleEntity] (modelo de base de datos).
- * Esto mantiene la lógica de mapeo encapsulada y el código del repositorio más limpio.
+ * Normaliza la fecha de publicación antes de crear la entidad.
  *
  * @param subscriptionId El ID de la suscripción a la que pertenece este artículo.
  * @return Una instancia de [ArticleEntity] lista para ser insertada en la base de datos.
@@ -77,7 +78,7 @@ private fun NetworkArticle.toEntity(subscriptionId: Long) = ArticleEntity(
     guid = guid,
     title = title,
     link = link,
-    pubDate = pubDate,
+    pubDate = DateParser.normalizeDate(pubDate), // Normaliza la fecha
     content = content,
     thumbnailUrl = thumbnailUrl
 )
