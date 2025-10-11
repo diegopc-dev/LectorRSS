@@ -1,21 +1,17 @@
 package com.example.rssclipping.ui.articles
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -23,20 +19,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import com.example.rssclipping.data.local.database.model.ArticleEntity
 import com.example.rssclipping.navigation.Screen
+import com.example.rssclipping.ui.shared.ArticleItem
 
 /**
  * Composable que representa la pantalla que muestra la lista de artículos de una suscripción.
- *
- * @param viewModel El [ArticlesViewModel] que proporciona el estado (la lista de artículos).
- * @param navController El controlador de navegación para manejar la acción de volver atrás y de ir al detalle del artículo.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,8 +39,9 @@ fun ArticlesScreen(
 
     Scaffold(
         topBar = {
+            // El título ahora se toma del primer artículo, que ya contiene el nombre de la suscripción.
             TopAppBar(
-                title = { Text("Artículos") },
+                title = { Text(articles.firstOrNull()?.subscription?.name ?: "Artículos") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
@@ -69,57 +61,18 @@ fun ArticlesScreen(
             }
         } else {
             LazyColumn(
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(8.dp)
             ) {
-                items(articles) { article ->
+                items(articles, key = { it.article.id }) { articleWithSubscription ->
                     ArticleItem(
-                        article = article,
+                        articleWithSubscription = articleWithSubscription,
                         onClick = { 
-                            navController.navigate(Screen.ArticleDetail.createRoute(article.id))
+                            navController.navigate(Screen.ArticleDetail.createRoute(articleWithSubscription.article.id))
                         }
                     )
                 }
-            }
-        }
-    }
-}
-
-/**
- * Composable que representa un único elemento en la lista de artículos.
- * Muestra la miniatura del artículo, su título y su fecha de publicación.
- *
- * @param article La entidad [ArticleEntity] que contiene los datos a mostrar.
- * @param onClick La acción a ejecutar cuando el usuario pulsa sobre la tarjeta.
- */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ArticleItem(
-    article: ArticleEntity,
-    onClick: () -> Unit
-) {
-    Card(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    ) {
-        Column {
-            if (article.thumbnailUrl.isNotBlank()) {
-                AsyncImage(
-                    model = article.thumbnailUrl,
-                    contentDescription = "Miniatura del artículo",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp),
-                    contentScale = ContentScale.Crop
-                )
-            }
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(text = article.title, style = MaterialTheme.typography.titleMedium)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(text = article.pubDate, style = MaterialTheme.typography.bodySmall)
             }
         }
     }

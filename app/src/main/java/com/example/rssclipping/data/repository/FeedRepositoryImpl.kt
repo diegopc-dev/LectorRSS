@@ -2,6 +2,7 @@ package com.example.rssclipping.data.repository
 
 import com.example.rssclipping.data.local.database.dao.ArticleDao
 import com.example.rssclipping.data.local.database.model.ArticleEntity
+import com.example.rssclipping.data.local.database.model.ArticleWithSubscription
 import com.example.rssclipping.data.network.RssNetworkDataSource
 import com.example.rssclipping.data.network.model.DateParser
 import com.example.rssclipping.data.network.model.NetworkArticle
@@ -24,15 +25,15 @@ class FeedRepositoryImpl(
     private val subscriptionRepository: SubscriptionRepository
 ) : FeedRepository {
 
-    override fun getAllArticles(): Flow<List<ArticleEntity>> {
+    override fun getAllArticles(): Flow<List<ArticleWithSubscription>> {
         return articleDao.getAllArticles()
     }
 
-    override fun getArticles(subscriptionId: Long): Flow<List<ArticleEntity>> {
+    override fun getArticles(subscriptionId: Long): Flow<List<ArticleWithSubscription>> {
         return articleDao.getArticlesBySubscriptionId(subscriptionId)
     }
 
-    override fun getArticle(id: Long): Flow<ArticleEntity?> {
+    override fun getArticle(id: Long): Flow<ArticleWithSubscription?> {
         return articleDao.getById(id)
     }
 

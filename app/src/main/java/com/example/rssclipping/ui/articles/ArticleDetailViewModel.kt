@@ -3,7 +3,7 @@ package com.example.rssclipping.ui.articles
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rssclipping.data.local.database.model.ArticleEntity
+import com.example.rssclipping.data.local.database.model.ArticleWithSubscription
 import com.example.rssclipping.data.repository.FeedRepository
 import com.example.rssclipping.navigation.KEY_ARTICLE_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
  * ViewModel para la pantalla de detalle de un artículo.
  *
  * @param feedRepository Repositorio para obtener los datos del artículo.
- * @param savedStateHandle Manejador del estado guardado, usado para obtener el ID del artículo de los argumentos de navegación.
+ * @param savedStateHandle Manejador del estado guardado, usado para obtener el ID del artículo.
  */
 @HiltViewModel
 class ArticleDetailViewModel @Inject constructor(
@@ -27,10 +27,10 @@ class ArticleDetailViewModel @Inject constructor(
     private val articleId: Long = checkNotNull(savedStateHandle[KEY_ARTICLE_ID])
 
     /**
-     * Un StateFlow que emite el artículo actual, o null si no se encuentra.
-     * La UI observará este Flow para mostrar los detalles del artículo.
+     * Un StateFlow que emite el artículo actual con su suscripción asociada.
+     * La UI observará este Flow para mostrar los detalles.
      */
-    val article: StateFlow<ArticleEntity?> = feedRepository.getArticle(articleId)
+    val articleWithSubscription: StateFlow<ArticleWithSubscription?> = feedRepository.getArticle(articleId)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000L),

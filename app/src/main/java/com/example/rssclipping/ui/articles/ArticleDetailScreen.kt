@@ -3,22 +3,29 @@ package com.example.rssclipping.ui.articles
 import android.text.method.LinkMovementMethod
 import android.widget.TextView
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -30,10 +37,6 @@ import coil.compose.AsyncImage
 
 /**
  * Composable que representa la pantalla de detalle de un artículo.
- * Muestra una imagen de cabecera y el contenido del artículo de forma nativa.
- *
- * @param viewModel El [ArticleDetailViewModel] que proporciona el estado (el artículo a mostrar).
- * @param navController El controlador de navegación para manejar la acción de volver atrás.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,12 +44,12 @@ fun ArticleDetailScreen(
     viewModel: ArticleDetailViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val article by viewModel.article.collectAsStateWithLifecycle()
+    val articleWithSubscription by viewModel.articleWithSubscription.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(article?.title ?: "") },
+                title = { Text(articleWithSubscription?.article?.title ?: "") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
@@ -55,11 +58,14 @@ fun ArticleDetailScreen(
             )
         }
     ) { innerPadding ->
-        article?.let { article ->
+        articleWithSubscription?.let { data ->
+            val article = data.article
+            val subscription = data.subscription
+
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .verticalScroll(rememberScrollState()) // Make the whole screen scrollable
+                    .verticalScroll(rememberScrollState())
             ) {
                 if (article.thumbnailUrl.isNotBlank()) {
                     AsyncImage(
@@ -72,17 +78,42 @@ fun ArticleDetailScreen(
                     )
                 }
 
-                // Replace the heavy WebView with a lightweight AndroidView wrapping a TextView
+                // Fila para mostrar la información de la suscripción
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AsyncImage(
+                        model = subscription.iconUrl,
+                        contentDescription = "Icono de ${subscription.name}",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Column {
+                        Text(
+                            text = subscription.name,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            text = article.pubDate,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                // Contenido del artículo en HTML
                 AndroidView(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     factory = {
                         TextView(it).apply {
-                            // This makes links clickable
                             movementMethod = LinkMovementMethod.getInstance()
                         }
                     },
                     update = { textView ->
-                        // Use HtmlCompat to parse the HTML and set it to the TextView
                         textView.text = HtmlCompat.fromHtml(article.content, HtmlCompat.FROM_HTML_MODE_COMPACT)
                     }
                 )

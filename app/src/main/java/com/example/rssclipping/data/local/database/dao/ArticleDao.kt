@@ -4,7 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.rssclipping.data.local.database.model.ArticleEntity
+import com.example.rssclipping.data.local.database.model.ArticleWithSubscription
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -15,27 +17,28 @@ import kotlinx.coroutines.flow.Flow
 interface ArticleDao {
     /**
      * Inserta una lista de artículos en la base de datos.
-     * Si un artículo ya existe (basado en el índice único 'guid'), será reemplazado
-     * gracias a la estrategia OnConflictStrategy.REPLACE.
+     * Si un artículo ya existe (basado en el índice único 'guid'), será reemplazado.
      * @param articles La lista de entidades de artículo a insertar.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(articles: List<ArticleEntity>)
 
     /**
-     * Recupera todos los artículos de la base de datos, ordenados por fecha de publicación descendente.
-     * @return Un Flow que emite la lista completa de artículos.
+     * Recupera todos los artículos con su información de suscripción, ordenados por fecha descendente.
+     * @return Un Flow que emite la lista completa de artículos con sus suscripciones.
      */
+    @Transaction
     @Query("SELECT * FROM articles ORDER BY pubDate DESC")
-    fun getAllArticles(): Flow<List<ArticleEntity>>
+    fun getAllArticles(): Flow<List<ArticleWithSubscription>>
 
     /**
-     * Recupera todos los artículos asociados a un ID de suscripción específico.
+     * Recupera todos los artículos de una suscripción específica, con su información de suscripción.
      * @param subscriptionId El ID de la suscripción padre.
      * @return Un Flow que emite la lista de artículos para la suscripción dada.
      */
+    @Transaction
     @Query("SELECT * FROM articles WHERE subscriptionId = :subscriptionId ORDER BY pubDate DESC")
-    fun getArticlesBySubscriptionId(subscriptionId: Long): Flow<List<ArticleEntity>>
+    fun getArticlesBySubscriptionId(subscriptionId: Long): Flow<List<ArticleWithSubscription>>
 
     /**
      * Elimina todos los artículos asociados a un ID de suscripción específico.
@@ -45,10 +48,11 @@ interface ArticleDao {
     suspend fun deleteAllForSubscription(subscriptionId: Long)
 
     /**
-     * Recupera un artículo específico por su ID.
+     * Recupera un artículo específico por su ID, con su información de suscripción.
      * @param id El ID del artículo a buscar.
-     * @return Un Flow que emite la [ArticleEntity] correspondiente, o null si no se encuentra.
+     * @return Un Flow que emite el [ArticleWithSubscription] correspondiente, o null si no se encuentra.
      */
+    @Transaction
     @Query("SELECT * FROM articles WHERE id = :id")
-    fun getById(id: Long): Flow<ArticleEntity?>
+    fun getById(id: Long): Flow<ArticleWithSubscription?>
 }
